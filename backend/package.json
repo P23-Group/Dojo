@@ -1,0 +1,28 @@
+{
+  "name": "dojo",
+  "version": "1.0.0",
+  "description": "DOJO, трекер звичок із персонажем",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/P23-Group/Dojo.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "module",
+  "bugs": {
+    "url": "https://github.com/P23-Group/Dojo/issues"
+  },
+  "homepage": "https://github.com/P23-Group/Dojo#readme",
+  "dependencies": {
+    "express": "^5.3.0"
+  }
+}
