@@ -1,0 +1,9 @@
+.auth__subtitle {
+  max-width: 21em;
+}
+
+.auth__row .auth__link,
+.auth__footer .auth__link {
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
