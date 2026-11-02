@@ -4,9 +4,9 @@ import mongoose from "mongoose";
 import cors from "cors";
 import dns from "node:dns";
 import User from "./Model/model.js";
-import  bcrypt  from  "bcrypt" ;
+import bcrypt  from  "bcrypt" ;
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
-
+import jwt from "jsonwebtoken";
 
 
 mongoose
@@ -41,6 +41,8 @@ app.post("/auth/register", async (req, res) => {
   let emailExists = await User.findOne({ email: email });
   let hasLetter = false;
   let hasNumber = false;
+
+  try{
 
   if(!name || !email || !password) 
     return res.status(400).json({error: "Missing required fields"});
@@ -77,4 +79,48 @@ app.post("/auth/register", async (req, res) => {
       lvl: 1,
       xp: 0,
     })
+  }
+
+  catch(err){
+    console.error(err);
+    return res.status(500).json({error: "Internal server error"});
+  }
+  
+})
+
+
+app.post("/auth/login", async (req, res) => {
+
+
+  // проверка если ничего не напишет 
+  const email = req.body.email.toLowerCase().trim();
+  const password = req.body.password.trim();
+
+  if(!email || !password) 
+    return res.status(400).json({error: "Missing required fields"});
+
+  const user = await User.findOne({ email: email });
+
+  if (!user) {
+    return res.status(404).json({error: "User not found"});
+  }
+
+  let isPasswordCorrect = await bcrypt.compareSync(password, user.hashPassword);
+
+  if (!isPasswordCorrect)
+    return res.status(401).json({error: "Invalid password or email"});
+  
+  const token = jwt.sign(
+  {
+    userId: user.id
+  },
+  process.env.JWT_SECRET,
+  {
+    expiresIn: "1h"
+  }
+  );
+
+  return res.status(200).json({token: token});
+
+
 })
