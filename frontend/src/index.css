@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+
 :root {
   --color-primary-purple: #8B5CF6;
   --color-deep-purple: #7C3AED;
@@ -18,7 +20,7 @@
   --color-text-secondary: #A1A1AA;
   --color-text-muted: #6B7280;
 
-  --font-family: Arial, Helvetica, sans-serif;
+  --font-family: 'Inter', Arial, Helvetica, sans-serif;
 
   --fs-h1: 32px;  --fw-h1: 700;  --lh-h1: 40px;
   --fs-h2: 24px;  --fw-h2: 700;  --lh-h2: 32px;
@@ -48,6 +50,27 @@
   --btn-h-tertiary: 36px;
 }
 
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
 body {
   margin: 0;
+  background-color: var(--color-background);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body);
+  line-height: var(--lh-body);
+  -webkit-font-smoothing: antialiased;
+}
+
+.test-row{
+  margin: 15px;
+  gap: 20px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
 }

@@ -1,122 +1,74 @@
-import { useState } from 'react'
-import heroImg from './assets/hero.png'
-import reactLogo from './assets/react.svg'
-import viteLogo from './assets/vite.svg'
-import './App.css'
+import { useState } from 'react';
+import './App.css';
+import { Button, Input, Card } from './components';
 
 function App() {
-  const [count, setCount] = useState(0)
+  const [email, setEmail] = useState('');
+  const [clicks, setClicks] = useState(0);
+
+  const handleCancel = () => {
+    console.log('Скасовано');
+  };
 
   return (
     <>
-      <section id="center">
-        <div className="hero">
-          <img src={heroImg} className="base" width="170" height="179" alt="" />
-          <img src={reactLogo} className="framework" alt="React logo" />
-          <img src={viteLogo} className="vite" alt="Vite logo" />
-        </div>
-        <div>
-          <h1>Hello</h1>
-          <p>
-            Edit <code>src/App.jsx</code> and save to test <code>HMR</code>
-          </p>
-        </div>
-        <button
-          type="button"
-          className="counter"
-          onClick={() => setCount((count) => count + 1)}
-        >
-          Count is {count}
-        </button>
-      </section>
+      
+      <h2 style={{ margin: '15px' }}>Buttons: default</h2>
+      <div className="test-row">
+        <Button>Зберегти</Button>
+        <Button variant="secondary" onClick={handleCancel}>Скасувати</Button>
+        <Button variant="tertiary">Пропустити</Button>
+      </div>
 
-      <div className="ticks"></div>
+      <h2 style={{ margin: '15px' }}>Buttons: disabled</h2>
+      <div className="test-row">
+        <Button disabled>Зберегти</Button>
+        <Button variant="secondary" onClick={handleCancel} disabled>Скасувати</Button>
+        <Button variant="tertiary" disabled>Пропустити</Button>
+      </div>
 
-      <section id="next-steps">
-        <div id="docs">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#documentation-icon"></use>
-          </svg>
-          <h2>Documentation</h2>
-          <p>Your questions, answered</p>
-          <ul>
-            <li>
-              <a href="https://vite.dev/" target="_blank">
-                <img className="logo" src={viteLogo} alt="" />
-                Explore Vite
-              </a>
-            </li>
-            <li>
-              <a href="https://react.dev/" target="_blank">
-                <img className="button-icon" src={reactLogo} alt="" />
-                Learn more
-              </a>
-            </li>
-          </ul>
-        </div>
-        <div id="social">
-          <svg className="icon" role="presentation" aria-hidden="true">
-            <use href="/icons.svg#social-icon"></use>
-          </svg>
-          <h2>Connect with us</h2>
-          <p>Join the Vite community</p>
-          <ul>
-            <li>
-              <a href="https://github.com/vitejs/vite" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#github-icon"></use>
-                </svg>
-                GitHub
-              </a>
-            </li>
-            <li>
-              <a href="https://chat.vite.dev/" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#discord-icon"></use>
-                </svg>
-                Discord
-              </a>
-            </li>
-            <li>
-              <a href="https://x.com/vite_js" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#x-icon"></use>
-                </svg>
-                X.com
-              </a>
-            </li>
-            <li>
-              <a href="https://bsky.app/profile/vite.dev" target="_blank">
-                <svg
-                  className="button-icon"
-                  role="presentation"
-                  aria-hidden="true"
-                >
-                  <use href="/icons.svg#bluesky-icon"></use>
-                </svg>
-                Bluesky
-              </a>
-            </li>
-          </ul>
-        </div>
-      </section>
+      <h2 style={{ margin: '15px' }}>Buttons: fullWidth + onClick</h2>
+      <div className="test-row">
+        <Button fullWidth onClick={() => setClicks(clicks + 1)}>
+          Натиснуто: {clicks}
+        </Button>
+      </div>
 
-      <div className="ticks"></div>
-      <section id="spacer"></section>
+      
+      <h2 style={{ margin: '15px' }}>Inputs</h2>
+      <div className="test-row">
+        <Input
+          label="Email"
+          placeholder="Enter your email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          value="alex@dojo.app"
+          readOnly
+          label="Filled"
+        />
+      </div>
+      <div className="test-row">
+        <Input
+          label="Error"
+          defaultValue="wrong"
+          error="Please enter a valid email"
+        />
+        <Input label="Disabled" placeholder="Недоступно" disabled />
+        <Input label="Password" type="password" placeholder="••••••••" />
+      </div>
+
+      
+      <h2 style={{ margin: '15px' }}>Cards</h2>
+      <div className="test-row">
+        <Card>Звичайна картка</Card>
+        <Card title="Клікабельна" onClick={() => console.log('Card click')}>
+          Наведи курсор і натисни
+        </Card>
+      </div>
     </>
-  )
+  );
 }
 
-export default App
+export default App;

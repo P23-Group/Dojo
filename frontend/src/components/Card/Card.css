@@ -1,0 +1,26 @@
+.card {
+  padding: var(--space-4);
+  background-color: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  color: var(--color-text-primary);
+}
+
+.card--clickable {
+  cursor: pointer;
+  transition: border-color 0.15s ease;
+}
+.card--clickable:hover {
+  border-color: var(--color-primary-purple);
+}
+.card--clickable:focus-visible {
+  outline: 2px solid var(--color-light-purple);
+  outline-offset: 2px;
+}
+
+.card__title {
+  margin: 0 0 var(--space-3);
+  font-size: var(--fs-h4);
+  font-weight: var(--fw-h4);
+  line-height: var(--lh-h4);
+}

@@ -1,0 +1,92 @@
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-2);
+  padding: 0 var(--space-6);
+  border: 2px solid transparent;
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family);
+  cursor: pointer;
+  transition: background-color 0.15s ease, border-color 0.15s ease,
+    color 0.15s ease;
+}
+
+.btn--full {
+  width: 100%;
+}
+
+.btn:focus-visible {
+  outline: 2px solid var(--color-light-purple);
+  outline-offset: 2px;
+}
+
+/* Primary*/
+.btn--primary {
+  height: var(--btn-h-primary);
+  background-color: var(--color-primary-purple);
+  color: var(--color-text-primary);
+  font-size: var(--fs-body-lg);
+  font-weight: var(--fw-body-lg);
+  line-height: var(--lh-body-lg);
+}
+.btn--primary:hover:not(:disabled) {
+  background-color: var(--color-deep-purple);
+}
+.btn--primary:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-deep-purple) 75%, black);
+}
+
+/*Secondary*/
+.btn--secondary {
+  height: var(--btn-h-secondary);
+  background-color: transparent;
+  border-color: var(--color-primary-purple);
+  color: var(--color-text-primary);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body-lg);
+  line-height: var(--lh-body);
+}
+.btn--secondary:hover:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-deep-purple) 32%, var(--color-surface));
+  border-color: color-mix(in srgb, var(--color-primary-purple) 85%, rgb(255, 255, 255));
+}
+.btn--secondary:active:not(:disabled) {
+  background-color: color-mix(in srgb, var(--color-deep-purple) 18%, var(--color-surface));
+  border-color: var(--color-deep-purple);
+}
+
+/*Tertiary*/
+.btn--tertiary {
+  height: var(--btn-h-tertiary);
+  padding: 0 var(--space-3);
+  background-color: transparent;
+  color: var(--color-primary-purple);
+  font-size: var(--fs-body);
+  font-weight: var(--fw-body-lg);
+  line-height: var(--lh-body);
+}
+.btn--tertiary:hover:not(:disabled) {
+  background-color: var(--color-surface-elevated);
+}
+.btn--tertiary:active:not(:disabled) {
+  background-color: var(--color-surface);
+}
+
+/*Disabled*/
+.btn:disabled {
+  cursor: not-allowed;
+}
+.btn--primary:disabled {
+  background-color: var(--color-border);
+  color: var(--color-text-muted);
+}
+.btn--secondary:disabled {
+  background-color: var(--color-border);
+  border-color: color-mix(in srgb, var(--color-border) 85%, rgb(255, 255, 255));
+  color: var(--color-text-muted);
+}
+.btn--tertiary:disabled {
+  background-color: var(--color-surface);
+  color: var(--color-text-muted);
+}
