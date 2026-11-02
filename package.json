@@ -1,5 +1,6 @@
 {
   "dependencies": {
+    "luxon": "^3.7.2",
     "mongodb": "^7.7.0",
     "mongoose": "^9.11.2"
   }
