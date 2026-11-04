@@ -28,6 +28,9 @@ app.get("/", (req, res) => {
   res.json({ status: "ok" });
 })
 
+// app.get("/test", (req,res) => {
+//   next(new Error("Test error"));
+// })
 
 app.post("/auth/register", async (req, res) => {
 
@@ -157,3 +160,9 @@ app.get("/me", async (req, res) => {
   })
 
 })
+
+// глобальный обработчик ошибок
+app.use((err, req, res, next) => {
+  console.error(err);
+  res.status(500).json({ error: "GLOBAL ERROR: Internal Server Error" });
+});
