@@ -1,16 +1,12 @@
+import { useHabits } from '../context/HabitsContext.jsx'
 import Card from '../components/Card.jsx'
 import HabitRow from '../components/HabitRow.jsx'
+import ProgressRing from '../components/ProgressRing.jsx'
 import './today.css'
 
-const HABITS = [
-  { id: 1, name: 'Morning run', description: '30 minutes outdoors', streak: 12, xp: 50, done: true },
-  { id: 2, name: 'Read 20 pages', description: 'Evening reading habit', streak: 8, xp: 30, done: false },
-  { id: 3, name: 'Drink water', description: '8 glasses a day', streak: 21, xp: 20, done: false },
-  { id: 4, name: 'Meditate', description: '10 minutes of focus', streak: 5, xp: 25, done: true },
-]
-
 export default function Today() {
-  const completed = HABITS.filter((h) => h.done).length
+  const { habits, setHabitDone } = useHabits()
+  const completed = habits.filter((h) => h.done).length
 
   return (
     <section className="today">
@@ -18,17 +14,17 @@ export default function Today() {
         <div>
           <h1 className="today__title">Today</h1>
           <p className="today__subtitle">
-            {completed} of {HABITS.length} habits completed
+            {completed} of {habits.length} habits completed
           </p>
         </div>
       </header>
 
       <Card className="today__progress">
-        <div className="today__progress-ring">
-          <span className="today__progress-value">
-            {Math.round((completed / HABITS.length) * 100)}%
-          </span>
-        </div>
+        <ProgressRing
+          value={completed}
+          maxValue={habits.length || 1}
+          size={96}
+        />
         <div className="today__progress-text">
           <h2 className="today__progress-title">Daily progress</h2>
           <p className="today__progress-description">
@@ -38,12 +34,19 @@ export default function Today() {
       </Card>
 
       <div className="today__list">
-        {HABITS.map((habit) => (
-          <HabitRow key={habit.id} habit={habit} defaultChecked={habit.done} />
+        {habits.map((habit) => (
+          <HabitRow
+            key={habit.id}
+            id={habit.id}
+            name={habit.name}
+            description={habit.description}
+            completed={habit.done}
+            streak={habit.streak}
+            xp={habit.xp}
+            onToggle={(id, value) => setHabitDone(id, value)}
+          />
         ))}
       </div>
     </section>
   )
 }
-
-export { Today }

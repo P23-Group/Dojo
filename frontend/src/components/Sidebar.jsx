@@ -1,4 +1,6 @@
 import { NavLink } from 'react-router-dom'
+import heroImage from '../assets/hero-character.png'
+import CharacterCard from './CharacterCard.jsx'
 import {
   HabitsIcon,
   ProgressIcon,
@@ -42,12 +44,12 @@ export default function Sidebar() {
       </nav>
 
       <div className="sidebar__footer">
-        <div className="sidebar__level">
-          <span className="sidebar__level-label">Level 5</span>
-          <div className="sidebar__level-bar">
-            <div className="sidebar__level-fill" style={{ width: '62%' }} />
-          </div>
-        </div>
+        <CharacterCard
+          name="Your hero"
+          image={heroImage}
+          level={5}
+          description="Keep building habits to level up."
+        />
       </div>
     </aside>
   )

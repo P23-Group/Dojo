@@ -1,5 +1,7 @@
 import { BrowserRouter, Navigate, Route, Routes, useNavigate } from 'react-router-dom'
+import { HabitsProvider } from './context/HabitsContext.jsx'
 import AppLayout from './components/AppLayout.jsx'
+import AddHabit from './pages/AddHabit.jsx'
 import CreateAccount from './pages/CreateAccount.jsx'
 import Habits from './pages/Habits.jsx'
 import Login from './pages/Login.jsx'
@@ -32,6 +34,7 @@ function AppRoutes() {
         <Route index element={<Navigate to="/today" replace />} />
         <Route path="/today" element={<Today />} />
         <Route path="/habits" element={<Habits />} />
+        <Route path="/add-habit" element={<AddHabit />} />
         <Route path="/progress" element={<Progress />} />
         <Route path="/stats" element={<Stats />} />
         <Route path="/settings" element={<Settings />} />
@@ -45,7 +48,9 @@ function AppRoutes() {
 export default function App() {
   return (
     <BrowserRouter>
-      <AppRoutes />
+      <HabitsProvider>
+        <AppRoutes />
+      </HabitsProvider>
     </BrowserRouter>
   )
 }

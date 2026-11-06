@@ -3,39 +3,62 @@ import Checkbox from './Checkbox.jsx'
 import './habit-row.css'
 
 export default function HabitRow({
-  habit,
-  defaultChecked = false,
+  id,
+  name,
+  description,
+  completed,
   onToggle,
+  habit,
+  checked: checkedProp,
+  defaultChecked = false,
+  streak,
+  xp,
 }) {
-  const [checked, setChecked] = useState(defaultChecked || Boolean(habit?.done))
+  const habitId = id ?? habit?.id
+  const habitName = name ?? habit?.name ?? 'Untitled habit'
+  const habitDescription = description ?? habit?.description
+  const habitStreak = streak ?? habit?.streak
+  const habitXp = xp ?? habit?.xp
+
+  const [internalChecked, setInternalChecked] = useState(
+    defaultChecked || Boolean(habit?.done) || Boolean(completed),
+  )
+
+  const isControlled =
+    completed !== undefined || checkedProp !== undefined
+  const checked = isControlled
+    ? Boolean(completed ?? checkedProp)
+    : internalChecked
 
   const handleChange = (event) => {
-    setChecked(event.target.checked)
-    onToggle?.(habit, event.target.checked)
+    if (!isControlled) {
+      setInternalChecked(event.target.checked)
+    }
+    onToggle?.(habitId, event.target.checked)
   }
 
   return (
     <div className={`habit-row${checked ? ' habit-row--done' : ''}`}>
       <Checkbox
-        id={`habit-${habit?.id ?? habit?.name}`}
+        id={`habit-${habitId ?? habitName}`}
         checked={checked}
         onChange={handleChange}
         label=""
       />
 
       <div className="habit-row__body">
-        <div className="habit-row__title">{habit?.name ?? 'Untitled habit'}</div>
-        {habit?.description && (
-          <div className="habit-row__description">{habit.description}</div>
+        <div className="habit-row__title">{habitName}</div>
+        {habitDescription && (
+          <div className="habit-row__description">{habitDescription}</div>
         )}
       </div>
 
       <div className="habit-row__meta">
-        {habit?.streak != null && (
-          <span className="habit-row__chip">🔥 {habit.streak} day streak</span>
+        {habitStreak != null && (
+          <span className="habit-row__chip">🔥 {habitStreak} day streak</span>
         )}
-        {habit?.xp != null && (
-          <span className="habit-row__chip">+{habit.xp} XP</span>
+        {habitXp != null && (
+          <span className="habit-row__chip">+{habitXp} XP</span>
         )}
       </div>
 
