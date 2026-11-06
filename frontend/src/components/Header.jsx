@@ -1,9 +1,42 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
+import { apiFetch } from '../api.js'
 import { BellIcon, SearchIcon } from './icons.jsx'
 import './header.css'
 
-export default function Header() {
+export default function Header({ user: userProp }) {
   const [query, setQuery] = useState('')
+  const [user, setUser] = useState(userProp || null)
+
+  useEffect(() => {
+    if (userProp) {
+      setUser(userProp)
+      return
+    }
+    const token = localStorage.getItem('token')
+    if (!token) return
+
+    let active = true
+    apiFetch('/me')
+      .then((data) => {
+        if (active) setUser(data)
+      })
+      .catch(() => {
+        if (active) setUser(null)
+      })
+
+    return () => {
+      active = false
+    }
+  }, [userProp])
+
+  const userName = user?.name || 'Guest'
+  const initials = userName
+    .split(' ')
+    .filter(Boolean)
+    .map((part) => part[0])
+    .join('')
+    .toUpperCase()
+    .slice(0, 2) || 'G'
 
   return (
     <header className="header">
@@ -26,8 +59,8 @@ export default function Header() {
         </button>
 
         <div className="header__user">
-          <span className="header__user-name">Alex Chen</span>
-          <div className="header__avatar" aria-hidden="true">AC</div>
+          <span className="header__user-name">{userName}</span>
+          <div className="header__avatar" aria-hidden="true">{initials}</div>
         </div>
       </div>
     </header>

@@ -6,7 +6,11 @@ import Button from '../components/Button.jsx'
 import './today.css'
 
 export default function Habits() {
-  const { habits, setHabitDone } = useHabits()
+  const { habits, loading, setHabitDone } = useHabits()
+
+  if (loading) {
+    return <p className="today__subtitle">Loading habits...</p>
+  }
 
   return (
     <section className="today">
@@ -29,7 +33,6 @@ export default function Habits() {
             description={habit.description}
             completed={habit.done}
             streak={habit.streak}
-            xp={habit.xp}
             onToggle={(id, value) => setHabitDone(id, value)}
           />
         ))}

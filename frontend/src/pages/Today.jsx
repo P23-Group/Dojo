@@ -5,8 +5,12 @@ import ProgressRing from '../components/ProgressRing.jsx'
 import './today.css'
 
 export default function Today() {
-  const { habits, setHabitDone } = useHabits()
+  const { habits, loading, setHabitDone } = useHabits()
   const completed = habits.filter((h) => h.done).length
+
+  if (loading) {
+    return <p className="today__subtitle">Loading habits...</p>
+  }
 
   return (
     <section className="today">
@@ -42,7 +46,6 @@ export default function Today() {
             description={habit.description}
             completed={habit.done}
             streak={habit.streak}
-            xp={habit.xp}
             onToggle={(id, value) => setHabitDone(id, value)}
           />
         ))}

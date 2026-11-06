@@ -19,6 +19,8 @@ export default function Login({ onNavigate }) {
   const [values, setValues] = useState({ email: '', password: '' })
   const [errors, setErrors] = useState({})
   const [remember, setRemember] = useState(true)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [serverError, setServerError] = useState('')
 
   const validate = (next) => {
     const nextErrors = {}
@@ -60,9 +62,51 @@ export default function Login({ onNavigate }) {
     setFieldError(field, validate(values)[field])
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setErrors(validate(values))
+    const nextErrors = validate(values)
+    setErrors(nextErrors)
+    setServerError('')
+
+    if (Object.keys(nextErrors).length > 0) return
+
+    setIsSubmitting(true)
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+      const response = await fetch(`${apiUrl}/auth/login`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: values.email.trim(),
+          password: values.password,
+        }),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (response.ok && data.token) {
+        localStorage.setItem('token', data.token)
+        if (remember) {
+          localStorage.setItem('remember', 'true')
+        }
+        window.location.href = '/today'
+        return
+      }
+
+      if (response.status === 404) {
+        setServerError('Користувача не знайдено')
+        setErrors((prev) => ({ ...prev, email: 'Користувача не знайдено' }))
+      } else if (response.status === 401) {
+        setServerError('Невірний email або пароль')
+        setErrors((prev) => ({ ...prev, password: 'Невірний email або пароль' }))
+      } else {
+        setServerError(data.error || 'Не вдалося увійти')
+      }
+    } catch (error) {
+      setServerError('Сервер недоступний. Спробуйте пізніше.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -132,13 +176,20 @@ export default function Login({ onNavigate }) {
               </button>
             </div>
 
+            {serverError && (
+              <p className="field__message field__message--error" role="alert">
+                {serverError}
+              </p>
+            )}
+
             <Button
               type="submit"
               className="btn--icon-end"
               icon={<ArrowRightIcon />}
               iconPosition="right"
+              disabled={isSubmitting}
             >
-              Log In
+              {isSubmitting ? 'Logging in...' : 'Log In'}
             </Button>
 
             <div className="auth__divider">

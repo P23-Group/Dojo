@@ -1,4 +1,6 @@
+import { useEffect, useState } from 'react'
 import { NavLink } from 'react-router-dom'
+import { apiFetch } from '../api.js'
 import heroImage from '../assets/hero-character.png'
 import CharacterCard from './CharacterCard.jsx'
 import {
@@ -18,7 +20,40 @@ const ITEMS = [
   { to: '/settings', label: 'Settings', Icon: SettingsIcon },
 ]
 
-export default function Sidebar() {
+export default function Sidebar({ user: userProp, progress: progressProp }) {
+  const [user, setUser] = useState(userProp || null)
+  const progress = progressProp ?? 0
+
+  useEffect(() => {
+    if (userProp) {
+      setUser(userProp)
+    }
+
+    const token = localStorage.getItem('token')
+    if (!token) return
+
+    let active = true
+    const load = () => {
+      apiFetch('/me')
+        .then((data) => {
+          if (active) setUser(data)
+        })
+        .catch(() => {})
+    }
+
+    if (!userProp) load()
+
+    const handler = () => load()
+    window.addEventListener('dojo:user-updated', handler)
+    return () => {
+      active = false
+      window.removeEventListener('dojo:user-updated', handler)
+    }
+  }, [userProp])
+
+  const level = user?.lvl ?? 1
+  const name = user?.name || 'Your hero'
+
   return (
     <aside className="sidebar">
       <div className="sidebar__brand">
@@ -45,9 +80,10 @@ export default function Sidebar() {
 
       <div className="sidebar__footer">
         <CharacterCard
-          name="Your hero"
+          name={name}
           image={heroImage}
-          level={5}
+          level={level}
+          progress={progress}
           description="Keep building habits to level up."
         />
       </div>

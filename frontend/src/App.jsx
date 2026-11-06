@@ -17,6 +17,8 @@ function AppRoutes() {
   const handleNavigate = (page) => {
     if (page === 'create' || page === 'create-account') {
       navigate('/create-account')
+    } else if (page === 'today' || page === 'home') {
+      navigate('/today')
     } else {
       navigate('/login')
     }

@@ -12,13 +12,11 @@ export default function HabitRow({
   checked: checkedProp,
   defaultChecked = false,
   streak,
-  xp,
 }) {
   const habitId = id ?? habit?.id
   const habitName = name ?? habit?.name ?? 'Untitled habit'
   const habitDescription = description ?? habit?.description
   const habitStreak = streak ?? habit?.streak
-  const habitXp = xp ?? habit?.xp
 
   const [internalChecked, setInternalChecked] = useState(
     defaultChecked || Boolean(habit?.done) || Boolean(completed),
@@ -56,9 +54,6 @@ export default function HabitRow({
       <div className="habit-row__meta">
         {habitStreak != null && (
           <span className="habit-row__chip">🔥 {habitStreak} day streak</span>
-        )}
-        {habitXp != null && (
-          <span className="habit-row__chip">+{habitXp} XP</span>
         )}
       </div>
 
