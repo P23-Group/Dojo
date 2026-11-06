@@ -1,0 +1,99 @@
+.header {
+  height: 72px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 0 var(--space-6);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border-subtle);
+}
+
+.header__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  flex: 1 1 320px;
+  max-width: 420px;
+  height: 40px;
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-full);
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border-subtle);
+}
+
+.header__search-icon {
+  width: 18px;
+  height: 18px;
+  color: var(--color-text-muted);
+  flex: 0 0 18px;
+}
+
+.header__search-input {
+  flex: 1 1 auto;
+  border: none;
+  background: none;
+  color: var(--color-text-primary);
+  outline: none;
+}
+
+.header__search-input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+}
+
+.header__icon-btn {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: var(--radius-full);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-secondary);
+  display: grid;
+  place-items: center;
+  cursor: pointer;
+  transition: color var(--transition-base), background var(--transition-base);
+}
+
+.header__icon-btn:hover {
+  color: var(--color-text-primary);
+}
+
+.header__badge {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--color-danger);
+}
+
+.header__user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+}
+
+.header__user-name {
+  font-weight: var(--font-weight-medium);
+  color: var(--color-text-primary);
+}
+
+.header__avatar {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--color-primary);
+  color: var(--color-text-inverse);
+  font-size: var(--font-size-caption);
+  font-weight: var(--font-weight-semibold);
+}
