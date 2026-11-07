@@ -3,7 +3,7 @@ import express from "express";
 import mongoose from "mongoose";
 import cors from "cors";
 import dns from "node:dns";
-import User from "./Model/model.js";
+import User from "./Model/user.js";
 import bcrypt  from  "bcrypt" ;
 dns.setServers(["8.8.8.8", "1.1.1.1"]);
 import jwt from "jsonwebtoken";
@@ -81,6 +81,8 @@ app.post("/auth/register", async (req, res) => {
       hashPassword: bcrypt.hashSync(password, 10),  // 10 = Раунды соли, повышает безопасность хэша, но увеличивает время
       lvl: 1,
       xp: 0,
+
+      // три новых поля
     })
   }
 
@@ -151,7 +153,10 @@ app.get("/me", async (req, res) => {
     name: user.name,
     email: user.email,
     lvl: user.lvl,
-    xp: user.xp
+    xp: user.xp,
+    streak: user.streak,
+    longestStreak: user.longestStreak,
+    lastActiveDate: user.lastActiveDate
   })
 
 })
