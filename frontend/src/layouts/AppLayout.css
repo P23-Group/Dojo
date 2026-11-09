@@ -1,0 +1,31 @@
+.app-layout,
+html,
+body,
+#root {
+  background-color: var(--color-background);
+}
+
+html,
+body,
+#root {
+  min-height: 100%;
+}
+
+.app-layout {
+  display: flex;
+  min-height: 100vh;
+  background: var(--color-background);
+  color: var(--color-text-primary);
+}
+
+.app-main {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.app-content {
+  flex: 1;
+  padding: var(--space-8);
+}

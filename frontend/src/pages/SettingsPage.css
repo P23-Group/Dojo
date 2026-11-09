@@ -1,0 +1,65 @@
+.settings-page {
+  color: var(--color-text-primary);
+}
+.settings-page > header {
+  margin-bottom: var(--space-6);
+}
+.settings-page h1 {
+  margin: 0;
+  font-size: var(--fs-h1);
+}
+.settings-page > header p,
+.settings-row p {
+  color: var(--color-text-secondary);
+}
+.settings-card {
+  margin-bottom: var(--space-4);
+  padding: var(--space-6);
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
+}
+.settings-card h2 {
+  margin: 0 0 var(--space-4);
+  font-size: var(--fs-h3);
+}
+.settings-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: var(--space-4);
+  background: var(--color-surface-elevated);
+  border-radius: var(--radius-md);
+}
+.settings-row p {
+  margin: var(--space-1) 0 0;
+  font-size: var(--fs-caption);
+}
+.settings-value {
+  color: var(--color-light-purple);
+}
+.settings-reset-button {
+  min-height: 40px;
+  padding: 0 var(--space-4);
+  border: 1px solid var(--color-danger);
+  border-radius: var(--radius-md);
+  background: transparent;
+  color: var(--color-danger);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+.settings-reset-button:hover {
+  background: rgba(239, 68, 68, 0.12);
+}
+.settings-reset-status {
+  margin: var(--space-3) 0 0;
+  color: var(--color-success);
+  font-size: var(--fs-caption);
+}
+@media (max-width: 520px) {
+  .settings-card {
+    padding: var(--space-4);
+  }
+}

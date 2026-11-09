@@ -1,0 +1,132 @@
+.app-header {
+  min-height: 80px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: var(--space-6);
+  padding: 0 var(--space-8);
+  background: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  direction: ltr;
+}
+
+.header-search-container {
+  display: flex;
+  align-items: center;
+  min-width: 40px;
+}
+
+.header-search-button {
+  width: 40px;
+  height: 40px;
+  flex: 0 0 40px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.header-search-button:hover {
+  border-color: var(--color-primary-purple);
+}
+
+.header-search {
+  width: 0;
+  overflow: hidden;
+  transition:
+    width 0.22s ease,
+    margin-left 0.22s ease;
+}
+
+.header-search-container.search-open .header-search {
+  width: min(360px, 40vw);
+  margin-left: var(--space-2);
+}
+
+.header-search input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: var(--space-3) var(--space-4);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  outline: none;
+  background: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  font-family: var(--font-family);
+  font-size: var(--fs-body);
+}
+
+.header-search input:focus {
+  border-color: var(--color-primary-purple);
+}
+
+.header-search input::placeholder {
+  color: var(--color-text-muted);
+}
+
+.header-user {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-left: auto;
+  direction: ltr;
+}
+
+.header-user-link {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  color: inherit;
+  text-decoration: none;
+  border-radius: var(--radius-md);
+}
+
+.header-user-link:hover .user-name {
+  color: var(--color-light-purple);
+}
+
+.notification-button {
+  width: 40px;
+  height: 40px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-elevated);
+  color: var(--color-text-primary);
+  cursor: pointer;
+}
+
+.notification-button:hover {
+  border-color: var(--color-primary-purple);
+}
+
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+  background: var(--color-deep-purple);
+  color: white;
+  font-weight: 700;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-1);
+}
+
+.user-name {
+  color: var(--color-text-primary);
+  font-size: var(--fs-body);
+  font-weight: 600;
+}
+
+.user-role {
+  color: var(--color-text-muted);
+  font-size: var(--fs-caption);
+}
