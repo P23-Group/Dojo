@@ -24,6 +24,8 @@ export default function CreateAccount({ onNavigate }) {
   })
   const [errors, setErrors] = useState({})
   const [terms, setTerms] = useState(false)
+  const [isSubmitting, setIsSubmitting] = useState(false)
+  const [serverError, setServerError] = useState('')
 
   const validate = (next) => {
     const nextErrors = {}
@@ -90,9 +92,49 @@ export default function CreateAccount({ onNavigate }) {
     )
   }
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault()
-    setErrors(validate({ ...values, terms }))
+    const nextErrors = validate({ ...values, terms })
+    setErrors(nextErrors)
+    setServerError('')
+
+    if (Object.keys(nextErrors).length > 0) return
+
+    setIsSubmitting(true)
+    try {
+      const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:3000'
+      const response = await fetch(`${apiUrl}/auth/register`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          name: values.fullName.trim(),
+          email: values.email.trim(),
+          password: values.password,
+        }),
+      })
+
+      const data = await response.json().catch(() => ({}))
+
+      if (response.ok) {
+        onNavigate('login')
+        return
+      }
+
+      if (
+        response.status === 409 ||
+        (typeof data.error === 'string' &&
+          data.error.toLowerCase().includes('already'))
+      ) {
+        setServerError('Email вже використовується')
+        setErrors((prev) => ({ ...prev, email: 'Email вже використовується' }))
+      } else {
+        setServerError(data.error || 'Не вдалося створити акаунт')
+      }
+    } catch (error) {
+      setServerError('Сервер недоступний. Спробуйте пізніше.')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   return (
@@ -198,8 +240,19 @@ export default function CreateAccount({ onNavigate }) {
               }
             />
 
-            <Button type="submit" icon={<ArrowRightIcon />} iconPosition="right">
-              Create Account
+            {serverError && (
+              <p className="field__message field__message--error" role="alert">
+                {serverError}
+              </p>
+            )}
+
+            <Button
+              type="submit"
+              icon={<ArrowRightIcon />}
+              iconPosition="right"
+              disabled={isSubmitting}
+            >
+              {isSubmitting ? 'Creating...' : 'Create Account'}
             </Button>
 
             <p className="auth__footer">
