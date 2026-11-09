@@ -1,7 +1,7 @@
 import mongoose from "mongoose";
 const checkInSchema = new mongoose.Schema({
-    habitId:{ type: String, required: true},
-    userId:{type: String, required: true},
+    habitId:{ type: mongoose.Schema.Types.ObjectId, ref: "Habit", required: true, index: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     date:{
         type: String,
         required: true,
