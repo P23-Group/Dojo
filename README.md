@@ -65,7 +65,7 @@ Frontend Developers
 
 Backend Developers
 
-- Prjadko Vadym Olehovič
+- Priadko Vadym Olehovič
 - Vynnyk Mykhailo Olehovich
 
 Project Manager
