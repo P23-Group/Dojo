@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 const habitSchema = new mongoose.Schema({
-    userId:{ type: String, required: true},
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true, index: true },
     name:{ type: String, required: true},
     category:{type: String, required: true},
     type: {
