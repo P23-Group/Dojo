@@ -21,44 +21,17 @@ export async function apiFetch(path, options = {}) {
 
   const data = await response.json().catch(() => ({}))
   if (!response.ok) {
+    if (response.status === 401 && getToken()) {
+      localStorage.removeItem('token')
+      localStorage.removeItem('remember')
+      if (window.location.pathname !== '/login') {
+        window.location.href = '/login'
+      }
+    }
     const error = new Error(data.error || 'Request failed')
     error.status = response.status
     error.data = data
     throw error
   }
   return data
-}
-
-export const StatsAPI = {
-  async get() {
-    return apiFetch('/stats')
-  },
-}
-
-export const ProgressAPI = {
-  async get(days = 7) {
-    return apiFetch(`/progress?days=${days}`)
-  },
-}
-
-export const HabitsAPI = {
-  async list() {
-    return apiFetch('/habits')
-  },
-  async create(payload) {
-    return apiFetch('/habits', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-  },
-  async checkins(date) {
-    const query = date ? `?date=${encodeURIComponent(date)}` : ''
-    return apiFetch(`/checkins${query}`)
-  },
-  async setCheckin(payload) {
-    return apiFetch('/checkins', {
-      method: 'POST',
-      body: JSON.stringify(payload),
-    })
-  },
 }

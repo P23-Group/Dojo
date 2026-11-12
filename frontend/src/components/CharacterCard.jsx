@@ -30,7 +30,7 @@ export default function CharacterCard({
       </div>
       <div className="character-card__progress">
         <div className="character-card__progress-label">
-          <span>Progress to next level</span>
+          <span>Today's progress</span>
           <span>{progress}%</span>
         </div>
         <div className="character-card__progress-bar">

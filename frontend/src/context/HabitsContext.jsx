@@ -1,7 +1,8 @@
 import { createContext, useCallback, useContext, useEffect, useState } from 'react'
-import { HabitsAPI } from '../api.js'
 
 const HabitsContext = createContext(null)
+
+const STORAGE_KEY = 'dojo:habits'
 
 const INITIAL_HABITS = [
   { id: 1, name: 'Morning run', description: '30 minutes outdoors', type: 'Helpful', goal: 30, unit: 'minutes', format: 'Counter', frequency: 'Daily', streak: 12, done: true },
@@ -10,86 +11,66 @@ const INITIAL_HABITS = [
   { id: 4, name: 'Meditate', description: '10 minutes of focus', type: 'Helpful', goal: 10, unit: 'minutes', format: 'Counter', frequency: 'Daily', streak: 5, done: true },
 ]
 
-function todayString() {
-  const d = new Date()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${d.getFullYear()}-${m}-${day}`
-}
-
-function mapBackendHabit(habit, checkins) {
-  const checkin = checkins.find((c) => c.habitId === habit._id || c.habitId === habit.id)
+function mapHabit(habit) {
   return {
-    id: habit._id || habit.id,
+    id: habit.id,
     name: habit.name,
-    description: `${habit.goalValue} ${habit.goalUnit}`,
-    type: habit.type === 'helpful' ? 'Helpful' : 'Harmful',
-    goal: habit.goalValue,
-    unit: habit.goalUnit,
-    format: habit.trackingFormat === 'counter' ? 'Counter' : 'Yes-No',
-    frequency: 'Daily',
-    streak: 0,
-    done: Boolean(checkin?.completed),
+    description: habit.description,
+    type: habit.type,
+    goal: habit.goal,
+    unit: habit.unit,
+    format: habit.format,
+    frequency: habit.frequency,
+    streak: habit.streak,
+    done: Boolean(habit.done),
   }
 }
 
+function loadStoredHabits() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY)
+    if (raw) {
+      const parsed = JSON.parse(raw)
+      if (Array.isArray(parsed)) return parsed.map(mapHabit)
+    }
+  } catch (e) {
+    // ignore
+  }
+  return null
+}
+
 export function HabitsProvider({ children }) {
-  const [habits, setHabits] = useState([])
-  const [loading, setLoading] = useState(true)
   const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null
 
-  const loadHabits = useCallback(async () => {
-    if (!token) {
-      setHabits(INITIAL_HABITS)
-      setLoading(false)
-      return
-    }
-
-    try {
-      setLoading(true)
-      const [backendHabits, checkins] = await Promise.all([
-        HabitsAPI.list(),
-        HabitsAPI.checkins(todayString()),
-      ])
-      setHabits(backendHabits.map((h) => mapBackendHabit(h, checkins)))
-    } catch (error) {
-      console.error('Failed to load habits', error)
-      setHabits(INITIAL_HABITS)
-    } finally {
-      setLoading(false)
-    }
-  }, [token])
+  const [habits, setHabits] = useState(() => {
+    const stored = loadStoredHabits()
+    if (stored) return stored
+    return token ? [] : INITIAL_HABITS.map(mapHabit)
+  })
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
-    loadHabits()
-  }, [loadHabits])
+    try {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(habits))
+    } catch (e) {
+      // ignore
+    }
+  }, [habits])
+
+  const loadHabits = useCallback(async () => {
+    setLoading(false)
+  }, [])
 
   const addHabit = async (habit) => {
-    if (!token) {
-      setHabits((prev) => [
-        ...prev,
-        {
-          id: Date.now(),
-          done: false,
-          streak: 0,
-          ...habit,
-        },
-      ])
-      return
-    }
-
-    const created = await HabitsAPI.create({
-      name: habit.name,
-      category: 'General',
-      type: (habit.type || 'Helpful').toLowerCase(),
-      trackingFormat: habit.format === 'Counter' ? 'counter' : 'yes_no',
-      goalValue: habit.goal || 1,
-      goalUnit: habit.unit || 'times',
-      frequency: [0, 1, 2, 3, 4, 5, 6],
-    })
-
-    const checkins = await HabitsAPI.checkins(todayString())
-    setHabits((prev) => [...prev, mapBackendHabit(created, checkins)])
+    setHabits((prev) => [
+      ...prev,
+      {
+        id: Date.now(),
+        done: false,
+        streak: 0,
+        ...mapHabit(habit),
+      },
+    ])
   }
 
   const setHabitDone = async (id, done) => {
@@ -98,20 +79,6 @@ export function HabitsProvider({ children }) {
         habit.id === id ? { ...habit, done } : habit,
       ),
     )
-
-    if (token) {
-      try {
-        await HabitsAPI.setCheckin({
-          habitId: id,
-          date: todayString(),
-          value: done ? 1 : 0,
-          completed: done,
-        })
-        window.dispatchEvent(new CustomEvent('dojo:user-updated'))
-      } catch (error) {
-        console.error('Failed to save checkin', error)
-      }
-    }
   }
 
   const toggleHabit = (id) => {
@@ -120,6 +87,10 @@ export function HabitsProvider({ children }) {
       setHabitDone(id, !habit.done)
     }
   }
+
+  useEffect(() => {
+    loadHabits()
+  }, [loadHabits])
 
   return (
     <HabitsContext.Provider

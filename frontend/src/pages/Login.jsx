@@ -86,6 +86,7 @@ export default function Login({ onNavigate }) {
 
       if (response.ok && data.token) {
         localStorage.setItem('token', data.token)
+        localStorage.removeItem('dojo:habits')
         if (remember) {
           localStorage.setItem('remember', 'true')
         }
