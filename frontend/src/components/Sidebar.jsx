@@ -43,16 +43,17 @@ export default function Sidebar({ user: userProp, progress: progressProp }) {
 
     if (!userProp) load()
 
-    const handler = () => load()
-    window.addEventListener('dojo:user-updated', handler)
     return () => {
       active = false
-      window.removeEventListener('dojo:user-updated', handler)
     }
   }, [userProp])
 
   const level = user?.lvl ?? 1
   const name = user?.name || 'Your hero'
+  const streak = user?.streak ?? 0
+  const description = streak > 0
+    ? `🔥 ${streak} day streak. Keep building habits to level up.`
+    : 'Keep building habits to level up.'
 
   return (
     <aside className="sidebar">
@@ -84,7 +85,7 @@ export default function Sidebar({ user: userProp, progress: progressProp }) {
           image={heroImage}
           level={level}
           progress={progress}
-          description="Keep building habits to level up."
+          description={description}
         />
       </div>
     </aside>

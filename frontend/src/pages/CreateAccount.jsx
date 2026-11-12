@@ -32,6 +32,8 @@ export default function CreateAccount({ onNavigate }) {
 
     if (!next.fullName.trim()) {
       nextErrors.fullName = 'Enter your name'
+    } else if (next.fullName.trim().length < 3 || next.fullName.trim().length > 20) {
+      nextErrors.fullName = 'Name must be 3-20 characters'
     }
 
     if (!next.email.trim()) {
@@ -44,6 +46,8 @@ export default function CreateAccount({ onNavigate }) {
       nextErrors.password = 'Create a password'
     } else if (next.password.length < 8) {
       nextErrors.password = 'Use at least 8 characters'
+    } else if (!/[a-zA-Z]/.test(next.password) || !/[0-9]/.test(next.password)) {
+      nextErrors.password = 'Password must contain a letter and a number'
     }
 
     if (!next.confirmPassword) {
@@ -116,6 +120,7 @@ export default function CreateAccount({ onNavigate }) {
       const data = await response.json().catch(() => ({}))
 
       if (response.ok) {
+        localStorage.removeItem('dojo:habits')
         onNavigate('login')
         return
       }

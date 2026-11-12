@@ -9,6 +9,7 @@ export default function Settings() {
   const handleLogout = () => {
     localStorage.removeItem('token')
     localStorage.removeItem('remember')
+    localStorage.removeItem('dojo:habits')
     window.location.href = '/login'
   }
 

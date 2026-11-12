@@ -1,13 +1,19 @@
 import { useEffect, useState } from 'react'
 import { Outlet } from 'react-router-dom'
 import { apiFetch } from '../api.js'
+import { useHabits } from '../context/HabitsContext.jsx'
 import Header from './Header.jsx'
 import Sidebar from './Sidebar.jsx'
 import './app-layout.css'
 
 export default function AppLayout() {
   const [user, setUser] = useState(null)
-  const [progress, setProgress] = useState(0)
+  const { habits } = useHabits()
+
+  const progress =
+    habits.length > 0
+      ? Math.round((habits.filter((h) => h.done).length / habits.length) * 100)
+      : 0
 
   useEffect(() => {
     const token = localStorage.getItem('token')
@@ -20,19 +26,11 @@ export default function AppLayout() {
           if (active) setUser(data)
         })
         .catch(() => {})
-      apiFetch('/stats')
-        .then((data) => {
-          if (active) setProgress(data?.completionRate || 0)
-        })
-        .catch(() => {})
     }
 
     load()
-    const handler = () => load()
-    window.addEventListener('dojo:user-updated', handler)
     return () => {
       active = false
-      window.removeEventListener('dojo:user-updated', handler)
     }
   }, [])
 
